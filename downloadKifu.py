@@ -1,6 +1,8 @@
 import Shogi24Lib
 
 class downloadKifu:
+    def __init__(self):
+        pass
     #ログイン処理
     def login(self):
         iniinfo = Shogi24Lib.inifile()
@@ -11,13 +13,14 @@ class downloadKifu:
             username = Shogi24Lib.defaultInput.inputID()
             password = Shogi24Lib.defaultInput.inputPass()
             self._shogi24login = Shogi24Lib.login(username,password)
-        return shogi24login.getSession()
+        self._shogi24login.doLogin()
+        return self._shogi24login.getSession()
 
     #検索して、ログイン者のIDを取得する
     def setUserId(self,session):
-        self._searchUser = Shogi24Lib.searchUSer(session)
-        self._searchUser.search(self._shogi24login.getUserName())
-        return self._searchUSer.getMatchId(self._shogi24login.getUserName())
+        self._searchUser = Shogi24Lib.searchUser(session,self._shogi24login.getUserName())
+        self._searchUser.search()
+        return self._searchUSer.getMatchId()
         
 
     #スクレイピング
@@ -28,24 +31,13 @@ class downloadKifu:
         return kifulistpage.scrapingListPage()
 
 
-
-    #棋譜取得
-    def getKifu(self):
-        pass
+    #リストから棋譜をファイル出力
+    def makeKifuFile(self,resultList):
+        shogi24Lib.kifu(resultList)
 
 if __name__ == "__main__":
     dwnkifu = downloadKifu()
     session = dwnkifu.login()
-
-#kishi = Shogi24Lib.kifuListPage(session)
-#kishi.setId("147126")
-#page = kishi.getListPage()
-#kishi.scrapingListPage()
-
-#print(kishi.getResultList())
-
-su = Shogi24Lib.searchUser(session)
-su.search("test")
-resultList = su.getMemberSearchResultList()
-for result in resultList:
-    print(getUserName())
+    userId = dwnkifu.setUserId(session)
+    resultList = dwnkifu.doScraping(session,userId)
+    makeKifuFile(resultList)
