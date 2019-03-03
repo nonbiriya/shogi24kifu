@@ -42,6 +42,7 @@ class downloadKifu:
         Shogi24Lib.kifu(resultList)
 
 if __name__ == "__main__":
+    print("将棋倶楽部２４の棋譜をダウンロードします・・・・")
     dwnkifu = downloadKifu()
     session = dwnkifu.login()
     userId = dwnkifu.setUserId(session)
